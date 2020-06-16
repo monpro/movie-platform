@@ -7,7 +7,6 @@ logs/
 guns-core/
 guns-generator/
 guns-rest/
-guns-api/
 # Log file
 *.log
 .gitattributes

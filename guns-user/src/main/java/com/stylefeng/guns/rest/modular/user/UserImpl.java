@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 public class UserImpl implements UserAPI {
     @Override
     public boolean login(String username, String password) {
-        return true;
+
+        System.out.println("User login: " + username + ", " + password);
+        return false;
     }
 }
