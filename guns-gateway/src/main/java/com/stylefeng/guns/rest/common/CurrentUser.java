@@ -1,4 +1,4 @@
-package com.stylefeng.guns.rest;
+package com.stylefeng.guns.rest.common;
 
 import com.style.guns.api.user.UserInfoModel;
 
