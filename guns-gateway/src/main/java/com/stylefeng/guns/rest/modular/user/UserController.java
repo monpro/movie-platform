@@ -20,7 +20,7 @@ public class UserController {
     @Reference(interfaceClass = UserAPI.class)
     private UserAPI userAPI;
 
-    @RequestMapping(name = "register", method = RequestMethod.POST)
+    @RequestMapping(value = "register", method = RequestMethod.POST)
     public ResponseVo register(UserModel userModel) {
         if (userModel.getUserName() == null || userModel.getUserName().trim().length() == 0) {
             return ResponseVo.serviceFail("username cannot be empty");
@@ -39,7 +39,7 @@ public class UserController {
         }
     }
 
-    @RequestMapping(name = "check", method = RequestMethod.POST)
+    @RequestMapping(value = "check", method = RequestMethod.POST)
     public ResponseVo check(String username) {
         if (username != null && username.trim().length() > 0) {
             boolean notExist = userAPI.checkUsername(username);
@@ -53,13 +53,13 @@ public class UserController {
         }
     }
 
-    @RequestMapping(name = "check", method = RequestMethod.GET)
+    @RequestMapping(value = "logout", method = RequestMethod.GET)
     public ResponseVo logout(String username) {
         // TODO: remove active user in cache layer
         return ResponseVo.serviceSuccess("logout");
     }
 
-    @RequestMapping(name = "getUserInfo", method = RequestMethod.GET)
+    @RequestMapping(value = "getUserInfo", method = RequestMethod.GET)
     public ResponseVo getUserInfo(String username) {
         String userId = CurrentUser.getCurrentUser();
         if (userId != null && userId.trim().length() > 0) {
@@ -75,7 +75,7 @@ public class UserController {
         }
     }
 
-    @RequestMapping(name = "updateUserInfo", method = RequestMethod.POST)
+    @RequestMapping(value = "updateUserInfo", method = RequestMethod.POST)
     public ResponseVo updateUserInfo(UserInfoModel userInfoModel) {
         String userId = CurrentUser.getCurrentUser();
         if (userId != null && userId.trim().length() > 0) {
