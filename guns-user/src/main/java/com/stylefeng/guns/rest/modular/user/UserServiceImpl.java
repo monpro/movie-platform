@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import sun.security.provider.MD5;
 
+import java.util.Date;
+
 @Component
 @Service(interfaceClass = UserAPI.class)
 public class UserServiceImpl implements UserAPI {
@@ -55,6 +57,7 @@ public class UserServiceImpl implements UserAPI {
     private UserInfoModel convertUserModelFromUserDO(MoocUserT moocUserT) {
         UserInfoModel userInfoModel = new UserInfoModel();
 
+        userInfoModel.setUuid(moocUserT.getUuid());
         userInfoModel.setAddress(moocUserT.getAddress());
         userInfoModel.setEmail(moocUserT.getEmail());
         userInfoModel.setUpdateTime(moocUserT.getUpdateTime().getTime());
@@ -82,14 +85,40 @@ public class UserServiceImpl implements UserAPI {
     }
 
     @Override
-    public UserInfoModel getUserInfo(int userId) {
-        MoocUserT moocUserT = moocUserTMapper.selectById(userId);
+    public UserInfoModel getUserInfo(int uuid) {
+        MoocUserT moocUserT = moocUserTMapper.selectById(uuid);
 
         return convertUserModelFromUserDO(moocUserT);
     }
 
     @Override
     public UserInfoModel updateUserInfo(UserInfoModel userInfoModel) {
-        return null;
+
+        MoocUserT moocUserT = new MoocUserT();
+
+        moocUserT.setUuid(userInfoModel.getUuid());
+        moocUserT.setNickName(userInfoModel.getNickname());
+        moocUserT.setUserSex(userInfoModel.getSex());
+        moocUserT.setUpdateTime(new Date(userInfoModel.getUpdateTime()));
+        moocUserT.setLifeState(Integer.parseInt(userInfoModel.getLifeState()));
+        moocUserT.setHeadUrl(userInfoModel.getHeadAddress());
+        moocUserT.setBirthday(userInfoModel.getBirthday());
+        moocUserT.setBiography(userInfoModel.getBiography());
+        moocUserT.setBeginTime(new Date(userInfoModel.getBeginTime()));
+        moocUserT.setAddress(userInfoModel.getAddress());
+        moocUserT.setEmail(userInfoModel.getEmail());
+        moocUserT.setUserPhone(userInfoModel.getPhone());
+        moocUserT.setUserName(userInfoModel.getUsername());
+
+        // store userDO into database
+
+        Integer result = moocUserTMapper.updateById(moocUserT);
+        if (result > 0) {
+            UserInfoModel userInfo = getUserInfo(moocUserT.getUuid());
+            return userInfo;
+        } else {
+            return userInfoModel;
+        }
+
     }
 }
