@@ -10,9 +10,8 @@ import com.stylefeng.guns.rest.common.persistence.dao.MoocUserTMapper;
 import com.stylefeng.guns.rest.common.persistence.model.MoocUserT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import sun.security.provider.MD5;
 
-import java.util.Date;
+
 
 @Component
 @Service(interfaceClass = UserAPI.class)
@@ -22,9 +21,9 @@ public class UserServiceImpl implements UserAPI {
     private MoocUserTMapper moocUserTMapper;
 
     @Override
-    public int login(String username, String password) {
+    public int login(String userName, String password) {
         MoocUserT moocUserT = new MoocUserT();
-        moocUserT.setUserName(moocUserT.getUserName());
+        moocUserT.setUserName(userName);
         MoocUserT result = moocUserTMapper.selectOne(moocUserT);
 
         if (result != null && result.getUuid() > 0) {
@@ -99,12 +98,10 @@ public class UserServiceImpl implements UserAPI {
         moocUserT.setUuid(userInfoModel.getUuid());
         moocUserT.setNickName(userInfoModel.getNickname());
         moocUserT.setUserSex(userInfoModel.getSex());
-        moocUserT.setUpdateTime(new Date(userInfoModel.getUpdateTime()));
         moocUserT.setLifeState(Integer.parseInt(userInfoModel.getLifeState()));
         moocUserT.setHeadUrl(userInfoModel.getHeadAddress());
         moocUserT.setBirthday(userInfoModel.getBirthday());
         moocUserT.setBiography(userInfoModel.getBiography());
-        moocUserT.setBeginTime(new Date(userInfoModel.getBeginTime()));
         moocUserT.setAddress(userInfoModel.getAddress());
         moocUserT.setEmail(userInfoModel.getEmail());
         moocUserT.setUserPhone(userInfoModel.getPhone());
