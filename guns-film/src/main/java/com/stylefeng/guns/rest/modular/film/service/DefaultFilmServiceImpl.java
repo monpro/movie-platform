@@ -48,7 +48,7 @@ public class DefaultFilmServiceImpl implements FilmServiceApi {
         FilmVO result = new FilmVO();
         List<FilmInfo> filmInfoList = new ArrayList<>();
         EntityWrapper<MoocFilmT> entityWrapper = new EntityWrapper<>();
-        // 1 means hot movies
+        // 1 means movies showing
         entityWrapper.eq("film_status", "1");
         if (isLimit) {
             Page<MoocFilmT> page = new Page<>(1, nums);
@@ -87,16 +87,34 @@ public class DefaultFilmServiceImpl implements FilmServiceApi {
 
     @Override
     public List<FilmInfo> getBoxRanking() {
-        return null;
+        // films showing boxing top 10
+        EntityWrapper<MoocFilmT> entityWrapper = new EntityWrapper<>();
+        // 1 means movies showing
+        entityWrapper.eq("film_status", "1");
+        Page<MoocFilmT> page = new Page<>(1, 10, "film_box_office");
+        List<MoocFilmT> moocFilms = moocFilmTMapper.selectPage(page, entityWrapper);
+        return getFilmInfoList(moocFilms);
     }
 
     @Override
     public List<FilmInfo> getExpectRanking() {
-        return null;
+        // films coming soon
+        EntityWrapper<MoocFilmT> entityWrapper = new EntityWrapper<>();
+        // 2 means movies coming soon
+        entityWrapper.eq("film_status", "2");
+        Page<MoocFilmT> page = new Page<>(1, 10, "film_preSaleNum");
+        List<MoocFilmT> moocFilms = moocFilmTMapper.selectPage(page, entityWrapper);
+        return getFilmInfoList(moocFilms);
     }
 
     @Override
     public List<FilmInfo> getTop() {
-        return null;
+        // films showing score top 10
+        EntityWrapper<MoocFilmT> entityWrapper = new EntityWrapper<>();
+        // 1 means movies showing
+        entityWrapper.eq("film_status", "1");
+        Page<MoocFilmT> page = new Page<>(1, 10, "film_score");
+        List<MoocFilmT> moocFilms = moocFilmTMapper.selectPage(page, entityWrapper);
+        return getFilmInfoList(moocFilms);
     }
 }
