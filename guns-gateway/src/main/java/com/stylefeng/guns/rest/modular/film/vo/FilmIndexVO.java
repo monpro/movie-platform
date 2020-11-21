@@ -1,5 +1,8 @@
 package com.stylefeng.guns.rest.modular.film.vo;
 
+import com.style.guns.api.film.vo.BannerVO;
+import com.style.guns.api.film.vo.FilmInfo;
+import com.style.guns.api.film.vo.FilmVO;
 import lombok.Data;
 
 import java.util.List;

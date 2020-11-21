@@ -6,7 +6,6 @@ target/
 logs/
 guns-core/
 guns-generator/
-guns-rest/
 # Log file
 *.log
 .gitattributes

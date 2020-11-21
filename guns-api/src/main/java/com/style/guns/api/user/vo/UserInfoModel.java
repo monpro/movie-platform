@@ -1,4 +1,4 @@
-package com.style.guns.api.user;
+package com.style.guns.api.user.vo;
 
 import java.io.Serializable;
 import java.util.Date;
