@@ -56,9 +56,9 @@ public class DefaultFilmServiceImpl implements FilmServiceApi {
             filmInfoList = getFilmInfoList(moocFilms);
             result.setFilmInfoList(filmInfoList);
         } else {
-
+            // TODO
         }
-        return null;
+        return result;
     }
 
     private List<FilmInfo> getFilmInfoList(List<MoocFilmT> moocFilms) {
@@ -82,7 +82,21 @@ public class DefaultFilmServiceImpl implements FilmServiceApi {
 
     @Override
     public FilmVO getSoonFilms(boolean isLimit, int nums) {
-        return null;
+        // isLimit is true if at main page
+        FilmVO result = new FilmVO();
+        List<FilmInfo> filmInfoList = new ArrayList<>();
+        EntityWrapper<MoocFilmT> entityWrapper = new EntityWrapper<>();
+        // 1 means movies showing
+        entityWrapper.eq("film_status", "1");
+        if (isLimit) {
+            Page<MoocFilmT> page = new Page<>(1, nums);
+            List<MoocFilmT> moocFilms = moocFilmTMapper.selectPage(page, entityWrapper);
+            filmInfoList = getFilmInfoList(moocFilms);
+            result.setFilmInfoList(filmInfoList);
+        } else {
+            // TODO: add other logic
+        }
+        return result;
     }
 
     @Override
