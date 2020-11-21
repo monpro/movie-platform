@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.stylefeng.guns</groupId>
-    <artifactId>guns-gateway</artifactId>
+    <artifactId>guns-film</artifactId>
     <version>0.0.1</version>
     <packaging>jar</packaging>
 
-    <name>guns-gateway</name>
-    <description>guns gateway</description>
+    <name>guns-film</name>
+    <description>guns film</description>
 
     <parent>
         <groupId>com.stylefeng</groupId>
@@ -59,10 +59,6 @@
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>1.2.17</version>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
 

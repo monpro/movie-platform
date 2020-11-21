@@ -3,15 +3,13 @@ package com.stylefeng.guns.rest.modular.user;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.style.guns.api.user.UserAPI;
-import com.style.guns.api.user.UserInfoModel;
-import com.style.guns.api.user.UserModel;
+import com.style.guns.api.user.vo.UserInfoModel;
+import com.style.guns.api.user.vo.UserModel;
 import com.stylefeng.guns.rest.common.CurrentUser;
 import com.stylefeng.guns.rest.modular.vo.ResponseVo;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Currency;
 
 @RequestMapping("/user/")
 @RestController

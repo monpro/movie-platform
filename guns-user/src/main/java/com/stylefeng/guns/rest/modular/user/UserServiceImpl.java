@@ -3,14 +3,13 @@ package com.stylefeng.guns.rest.modular.user;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.style.guns.api.user.UserAPI;
-import com.style.guns.api.user.UserInfoModel;
-import com.style.guns.api.user.UserModel;
+import com.style.guns.api.user.vo.UserInfoModel;
+import com.style.guns.api.user.vo.UserModel;
 import com.stylefeng.guns.core.util.MD5Util;
 import com.stylefeng.guns.rest.common.persistence.dao.MoocUserTMapper;
 import com.stylefeng.guns.rest.common.persistence.model.MoocUserT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 
 
 @Component
@@ -59,17 +58,16 @@ public class UserServiceImpl implements UserAPI {
         userInfoModel.setUuid(moocUserT.getUuid());
         userInfoModel.setAddress(moocUserT.getAddress());
         userInfoModel.setEmail(moocUserT.getEmail());
-        userInfoModel.setUpdateTime(moocUserT.getUpdateTime().getTime());
         userInfoModel.setSex(moocUserT.getUserSex());
         userInfoModel.setPhone(moocUserT.getUserPhone());
         userInfoModel.setNickname(moocUserT.getNickName());
-        userInfoModel.setLifeState("" + moocUserT.getLifeState());
+        userInfoModel.setLifeState(String.valueOf(moocUserT.getLifeState()));
         userInfoModel.setHeadAddress(moocUserT.getHeadUrl());
-        userInfoModel.setBeginTime(moocUserT.getBeginTime().getTime());
         userInfoModel.setUsername(moocUserT.getUserName());
         userInfoModel.setBiography(moocUserT.getBiography());
         userInfoModel.setBirthday(moocUserT.getBirthday());
-
+        userInfoModel.setBeginTime(moocUserT.getBeginTime());
+//        userInfoModel.setUpdateTime(moocUserT.getUpdateTime());
         return userInfoModel;
 
     }
