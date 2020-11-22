@@ -9,10 +9,10 @@ import java.util.List;
 public interface FilmServiceApi {
 
     // get banners
-    BannerVO getBanners();
+    List<BannerVO> getBanners();
 
     // get hot films
-    FilmVO getHotFimls(boolean isLimit, int nums);
+    FilmVO getHotFilms(boolean isLimit, int nums);
 
     FilmVO getSoonFilms(boolean isLimit, int nums);
 

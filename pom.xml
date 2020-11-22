@@ -9,6 +9,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>guns-rest</module>
         <module>guns-gateway</module>
         <module>guns-user</module>
         <module>guns-api</module>
