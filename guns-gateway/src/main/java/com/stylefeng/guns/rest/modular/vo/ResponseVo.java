@@ -1,5 +1,8 @@
 package com.stylefeng.guns.rest.modular.vo;
 
+import lombok.Data;
+
+@Data
 public class ResponseVo<T> {
 
     // 0 success, 1 fail, 500 error
@@ -10,7 +13,17 @@ public class ResponseVo<T> {
 
     private T data;
 
+    private String imgPre;
+
     private ResponseVo(){}
+
+    public static <T> ResponseVo serviceSuccess(String imgPre, T t) {
+        ResponseVo responseVo = new ResponseVo();
+        responseVo.setStatus(0);
+        responseVo.setData(t);
+        responseVo.setImgPre(imgPre);
+        return responseVo;
+    }
 
     public static<T> ResponseVo serviceSuccess(T t){
         ResponseVo responseVo = new ResponseVo();
@@ -44,27 +57,4 @@ public class ResponseVo<T> {
         return responseVo;
     }
 
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
-    public T getData() {
-        return data;
-    }
-
-    public void setData(T data) {
-        this.data = data;
-    }
 }
