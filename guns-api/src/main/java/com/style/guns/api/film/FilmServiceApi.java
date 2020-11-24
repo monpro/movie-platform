@@ -1,8 +1,6 @@
 package com.style.guns.api.film;
 
-import com.style.guns.api.film.vo.BannerVO;
-import com.style.guns.api.film.vo.FilmInfo;
-import com.style.guns.api.film.vo.FilmVO;
+import com.style.guns.api.film.vo.*;
 
 import java.util.List;
 
@@ -22,5 +20,12 @@ public interface FilmServiceApi {
 
     // get top 100
     List<FilmInfo> getTop();
+
+    // interface film condition
+    List<CatVO> getCats();
+
+    List<SourceVO> getSources();
+
+    List<YearVO> getYears();
 
 }

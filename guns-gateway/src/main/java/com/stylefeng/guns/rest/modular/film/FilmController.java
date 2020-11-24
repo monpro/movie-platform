@@ -2,11 +2,19 @@ package com.stylefeng.guns.rest.modular.film;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.style.guns.api.film.FilmServiceApi;
+import com.style.guns.api.film.vo.CatVO;
+import com.style.guns.api.film.vo.SourceVO;
+import com.style.guns.api.film.vo.YearVO;
+import com.stylefeng.guns.rest.modular.film.vo.FilmConditionVO;
 import com.stylefeng.guns.rest.modular.film.vo.FilmIndexVO;
 import com.stylefeng.guns.rest.modular.vo.ResponseVo;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/film/")
@@ -35,5 +43,122 @@ public class FilmController {
         filmIndexVO.setSoonFilms(filmServiceApi.getSoonFilms(true, 8));
         filmIndexVO.setTop100(filmServiceApi.getTop());
         return ResponseVo.serviceSuccess(IMG_PRE, filmIndexVO);
+    }
+
+    @RequestMapping(value = "getConditionList", method = RequestMethod.GET)
+    public ResponseVo getConditionList(@RequestParam(name = "catId", required = false, defaultValue = "99") String catId,
+                                       @RequestParam(name = "sourceId", required = false, defaultValue = "99") String sourceId,
+                                       @RequestParam(name = "yearId", required = false, defaultValue = "99") String yearId) {
+
+
+        FilmConditionVO filmConditionVO = new FilmConditionVO();
+
+        // find cats
+        boolean isCatMatch = false;
+        List<CatVO> catVOList = filmServiceApi.getCats();
+        List<CatVO> catVOResult = new ArrayList<>();
+        CatVO defaultCat = null;
+
+        for (CatVO catVO : catVOList) {
+            // defaultCatId
+            if (catVO.getCatId().equals("99")) {
+                defaultCat = catVO;
+                break;
+            }
+
+            if (catVO.getCatId().equals(catId)) {
+                isCatMatch = true;
+                catVO.setActive(true);
+            } else {
+                catVO.setActive(false);
+            }
+            catVOResult.add(catVO);
+        }
+
+        if (!isCatMatch) {
+            // set defaultCat active true
+            if (defaultCat != null) {
+                defaultCat.setActive(true);
+                catVOResult.add(defaultCat);
+            }
+        } else {
+            if (defaultCat != null) {
+                defaultCat.setActive(false);
+                catVOResult.add(defaultCat);
+            }
+        }
+
+        // find source
+        boolean isSourceMatch = false;
+        List<SourceVO> sourceVOList = filmServiceApi.getSources();
+        List<SourceVO> sourceVOResult = new ArrayList<>();
+        SourceVO defaultSource = null;
+
+        for (SourceVO sourceVO : sourceVOList) {
+            // defaultCatId
+            if (sourceVO.getSourceId().equals("99")) {
+                defaultSource = sourceVO;
+                break;
+            }
+
+            if (sourceVO.getSourceId().equals(sourceId)) {
+                isSourceMatch = true;
+                sourceVO.setActive(true);
+            } else {
+                sourceVO.setActive(false);
+            }
+            sourceVOResult.add(sourceVO);
+        }
+
+        if (!isSourceMatch) {
+            // set defaultCat active true
+            if (defaultSource != null) {
+                defaultSource.setActive(true);
+                sourceVOResult.add(defaultSource);
+            }
+        } else {
+            if (defaultSource != null) {
+                defaultSource.setActive(false);
+                sourceVOResult.add(defaultSource);
+            }
+        }
+
+        // find years
+        boolean isYearMatch = false;
+        List<YearVO> yearVOList = filmServiceApi.getYears();
+        List<YearVO> yearVoResult = new ArrayList<>();
+        YearVO defaultYear = null;
+        for (YearVO year : yearVOList) {
+            if (year.getYearId().equals("99")) {
+                defaultYear = year;
+                break;
+            }
+            if (year.getYearId().equals(catId)) {
+                isYearMatch = true;
+                year.setActive(true);
+            } else {
+                year.setActive(false);
+            }
+            yearVoResult.add(year);
+        }
+        // 如果不存在，则默认将全部变为Active状态
+        if (!isYearMatch) {
+            if (defaultYear != null) {
+                defaultYear.setActive(true);
+                yearVoResult.add(defaultYear);
+            }
+        } else {
+            if (defaultYear != null) {
+                defaultYear.setActive(false);
+                yearVoResult.add(defaultYear);
+            }
+        }
+
+        filmConditionVO.setCatInfo(catVOResult);
+        filmConditionVO.setSourceInfo(sourceVOResult);
+        filmConditionVO.setYearInfo(yearVoResult);
+
+
+        return ResponseVo.serviceSuccess(filmConditionVO);
     }
 }
