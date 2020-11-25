@@ -88,7 +88,7 @@ public class DefaultFilmServiceImpl implements FilmServiceApi {
             }
             if (catId != 99) {
                 String catQueryStr = "%#" + catId + "#%";
-                entityWrapper.eq("film_cats", catQueryStr);
+                entityWrapper.like("film_cats", catQueryStr);
             }
 
             List<MoocFilmT> moocFilms = moocFilmTMapper.selectPage(page, entityWrapper);
