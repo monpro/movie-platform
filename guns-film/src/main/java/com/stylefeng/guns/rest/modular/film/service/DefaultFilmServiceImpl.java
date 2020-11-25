@@ -307,4 +307,12 @@ public class DefaultFilmServiceImpl implements FilmServiceApi {
 
         return yearVOList;
     }
+
+    @Override
+    public FilmDetailVO getFilmDetail(int searchType, String searchParam) {
+
+        // query by name if searchType == 1 otherwise by id
+
+        return null;
+    }
 }

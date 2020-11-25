@@ -30,4 +30,6 @@ public interface FilmServiceApi {
 
     List<YearVO> getYears();
 
+    FilmDetailVO getFilmDetail(int searchType, String searchParam);
+
 }
