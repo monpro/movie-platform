@@ -3,10 +3,12 @@ package com.stylefeng.guns.rest.modular.film;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.style.guns.api.film.FilmServiceApi;
 import com.style.guns.api.film.vo.CatVO;
+import com.style.guns.api.film.vo.FilmVO;
 import com.style.guns.api.film.vo.SourceVO;
 import com.style.guns.api.film.vo.YearVO;
 import com.stylefeng.guns.rest.modular.film.vo.FilmConditionVO;
 import com.stylefeng.guns.rest.modular.film.vo.FilmIndexVO;
+import com.stylefeng.guns.rest.modular.film.vo.FilmRequestVO;
 import com.stylefeng.guns.rest.modular.vo.ResponseVo;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -39,8 +41,8 @@ public class FilmController {
         filmIndexVO.setBannerVOList(filmServiceApi.getBanners());
         filmIndexVO.setBoxRanking(filmServiceApi.getBoxRanking());
         filmIndexVO.setExpectRanking(filmServiceApi.getExpectRanking());
-        filmIndexVO.setHotFilms(filmServiceApi.getHotFilms(true, 8));
-        filmIndexVO.setSoonFilms(filmServiceApi.getSoonFilms(true, 8));
+        filmIndexVO.setHotFilms(filmServiceApi.getHotFilms(true, 8, 1, 1, 99, 99, 99));
+        filmIndexVO.setSoonFilms(filmServiceApi.getSoonFilms(true, 8, 1, 1, 99, 99, 99));
         filmIndexVO.setTop100(filmServiceApi.getTop());
         return ResponseVo.serviceSuccess(IMG_PRE, filmIndexVO);
     }
@@ -160,5 +162,64 @@ public class FilmController {
 
 
         return ResponseVo.serviceSuccess(filmConditionVO);
+    }
+
+    @RequestMapping(value = "getFilms", method = RequestMethod.GET)
+    public ResponseVo getFilms(FilmRequestVO filmRequestVO) {
+        FilmVO filmVO = null;
+        String imgPre = "www.google.com";
+        switch (filmRequestVO.getShowType()) {
+            case 1:
+                filmVO = filmServiceApi.getHotFilms(
+                        false,
+                        filmRequestVO.getPageSize(),
+                        filmRequestVO.getNowPage(),
+                        filmRequestVO.getSortId(),
+                        filmRequestVO.getSourceId(),
+                        filmRequestVO.getYearId(),
+                        filmRequestVO.getCatId()
+                );
+                break;
+
+            case 2:
+                filmVO = filmServiceApi.getSoonFilms(
+                        false,
+                        filmRequestVO.getPageSize(),
+                        filmRequestVO.getNowPage(),
+                        filmRequestVO.getSortId(),
+                        filmRequestVO.getSourceId(),
+                        filmRequestVO.getYearId(),
+                        filmRequestVO.getCatId()
+                );
+                break;
+            case 3:
+                filmVO = filmServiceApi.getClassicFilms(
+                        filmRequestVO.getPageSize(),
+                        filmRequestVO.getNowPage(),
+                        filmRequestVO.getSortId(),
+                        filmRequestVO.getSourceId(),
+                        filmRequestVO.getYearId(),
+                        filmRequestVO.getCatId()
+                );
+                break;
+            default:
+                filmVO = filmServiceApi.getHotFilms(
+                        false,
+                        filmRequestVO.getPageSize(),
+                        filmRequestVO.getNowPage(),
+                        filmRequestVO.getSortId(),
+                        filmRequestVO.getSourceId(),
+                        filmRequestVO.getYearId(),
+                        filmRequestVO.getCatId()
+                );
+                break;
+        }
+
+        return ResponseVo.serviceSuccess(
+                filmVO.getNowPage(),
+                filmVO.getTotalPage(),
+                imgPre,
+                filmVO.getFilmInfoList()
+        );
     }
 }

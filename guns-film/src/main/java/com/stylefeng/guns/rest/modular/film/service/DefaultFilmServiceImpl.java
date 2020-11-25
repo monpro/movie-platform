@@ -48,10 +48,10 @@ public class DefaultFilmServiceImpl implements FilmServiceApi {
     }
 
     @Override
-    public FilmVO getHotFilms(boolean isLimit, int nums) {
+    public FilmVO getHotFilms(boolean isLimit, int nums, int nowPage, int sortId, int sourceId, int yearId, int catId) {
         // isLimit is true if at main page
         FilmVO result = new FilmVO();
-        List<FilmInfo> filmInfoList = new ArrayList<>();
+        List<FilmInfo> filmInfoList = null;
         EntityWrapper<MoocFilmT> entityWrapper = new EntityWrapper<>();
         // 1 means movies showing
         entityWrapper.eq("film_status", "1");
@@ -61,7 +61,47 @@ public class DefaultFilmServiceImpl implements FilmServiceApi {
             filmInfoList = getFilmInfoList(moocFilms);
             result.setFilmInfoList(filmInfoList);
         } else {
-            // TODO
+            Page<MoocFilmT> page = null;
+
+            switch (sortId) {
+                case 1:
+                    page = new Page<>(nowPage, nums, "film_box_office");
+                    break;
+                case 2:
+                    page = new Page<>(nowPage, nums, "film_time");
+                    break;
+                case 3:
+                    page = new Page<>(nowPage, nums, "film_score");
+                    break;
+                default:
+                    page = new Page<>(nowPage, nums, "film_box_office");
+                    break;
+            }
+
+            // sourceId, yearId and catId not default value, then run a query
+
+            if (sourceId != 99) {
+                entityWrapper.eq("film_source", sourceId);
+            }
+            if (yearId != 99) {
+                entityWrapper.eq("film_date", yearId);
+            }
+            if (catId != 99) {
+                String catQueryStr = "%#" + catId + "#%";
+                entityWrapper.like("film_cats", catQueryStr);
+            }
+
+            List<MoocFilmT> moocFilms = moocFilmTMapper.selectPage(page, entityWrapper);
+            filmInfoList = getFilmInfoList(moocFilms);
+            result.setFilmInfoList(filmInfoList);
+
+            // get total pages - totalCounts / nums
+            int totalCounts = moocFilmTMapper.selectCount(entityWrapper);
+            int totalPages = (totalCounts / nums) + 1;
+            result.setFilmInfoList(filmInfoList);
+            result.setTotalPage(totalPages);
+            result.setNowPage(nowPage);
+
         }
         return result;
     }
@@ -86,21 +126,106 @@ public class DefaultFilmServiceImpl implements FilmServiceApi {
     }
 
     @Override
-    public FilmVO getSoonFilms(boolean isLimit, int nums) {
+    public FilmVO getSoonFilms(boolean isLimit, int nums, int nowPage, int sortId, int sourceId, int yearId, int catId) {
         // isLimit is true if at main page
         FilmVO result = new FilmVO();
         List<FilmInfo> filmInfoList = new ArrayList<>();
         EntityWrapper<MoocFilmT> entityWrapper = new EntityWrapper<>();
         // 1 means movies showing
-        entityWrapper.eq("film_status", "1");
+        entityWrapper.eq("film_status", "2");
         if (isLimit) {
             Page<MoocFilmT> page = new Page<>(1, nums);
             List<MoocFilmT> moocFilms = moocFilmTMapper.selectPage(page, entityWrapper);
             filmInfoList = getFilmInfoList(moocFilms);
             result.setFilmInfoList(filmInfoList);
         } else {
-            // TODO: add other logic
+            Page<MoocFilmT> page = null;
+
+            switch (sortId) {
+                case 1:
+                    page = new Page<>(nowPage, nums, "film_preSaleNum");
+                    break;
+                case 2:
+                    page = new Page<>(nowPage, nums, "film_time");
+                    break;
+                case 3:
+                    page = new Page<>(nowPage, nums, "film_preSaleNum");
+                    break;
+                default:
+                    page = new Page<>(nowPage, nums, "film_preSaleNum");
+                    break;
+            }            // sourceId, yearId and catId not default value, then run a query
+
+            if (sourceId != 99) {
+                entityWrapper.eq("film_source", sourceId);
+            }
+            if (yearId != 99) {
+                entityWrapper.eq("film_date", yearId);
+            }
+            if (catId != 99) {
+                String catQueryStr = "%#" + catId + "#%";
+                entityWrapper.eq("film_cats", catQueryStr);
+            }
+
+            List<MoocFilmT> moocFilms = moocFilmTMapper.selectPage(page, entityWrapper);
+            filmInfoList = getFilmInfoList(moocFilms);
+            result.setFilmInfoList(filmInfoList);
+
+            // get total pages - totalCounts / nums
+            int totalCounts = moocFilmTMapper.selectCount(entityWrapper);
+            int totalPages = (totalCounts / nums) + 1;
+            result.setFilmInfoList(filmInfoList);
+            result.setTotalPage(totalPages);
+            result.setNowPage(nowPage);
         }
+        return result;
+    }
+
+    @Override
+    public FilmVO getClassicFilms(int nums, int nowPage, int sortId, int sourceId, int yearId, int catId) {
+        FilmVO result = new FilmVO();
+        List<FilmInfo> filmInfoList = null;
+        EntityWrapper<MoocFilmT> entityWrapper = new EntityWrapper<>();
+        // 1 means movies showing
+        entityWrapper.eq("film_status", "3");
+        Page<MoocFilmT> page = null;
+
+        switch (sortId) {
+            case 1:
+                page = new Page<>(nowPage, nums, "film_box_office");
+                break;
+            case 2:
+                page = new Page<>(nowPage, nums, "film_time");
+                break;
+            case 3:
+                page = new Page<>(nowPage, nums, "film_score");
+                break;
+            default:
+                page = new Page<>(nowPage, nums, "film_box_office");
+                break;
+        }
+        if (sourceId != 99) {
+            entityWrapper.eq("film_source", sourceId);
+        }
+        if (yearId != 99) {
+            entityWrapper.eq("film_date", yearId);
+        }
+        if (catId != 99) {
+            String catQueryStr = "%#" + catId + "#%";
+            entityWrapper.eq("film_cats", catQueryStr);
+        }
+
+        List<MoocFilmT> moocFilms = moocFilmTMapper.selectPage(page, entityWrapper);
+        filmInfoList = getFilmInfoList(moocFilms);
+        result.setFilmInfoList(filmInfoList);
+
+        // get total pages - totalCounts / nums
+        int totalCounts = moocFilmTMapper.selectCount(entityWrapper);
+        int totalPages = (totalCounts / nums) + 1;
+        result.setFilmInfoList(filmInfoList);
+        result.setTotalPage(totalPages);
+        result.setNowPage(nowPage);
+
         return result;
     }
 

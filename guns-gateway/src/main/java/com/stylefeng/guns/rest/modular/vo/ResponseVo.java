@@ -15,7 +15,20 @@ public class ResponseVo<T> {
 
     private String imgPre;
 
+    private int nowPage;
+    private int totalPage;
+
     private ResponseVo(){}
+
+    public static <T> ResponseVo serviceSuccess(int nowPage, int totalPage, String imgPre, T t) {
+        ResponseVo responseVo = new ResponseVo();
+        responseVo.setStatus(0);
+        responseVo.setData(t);
+        responseVo.setImgPre(imgPre);
+        responseVo.setNowPage(nowPage);
+        responseVo.setTotalPage(totalPage);
+        return responseVo;
+    }
 
     public static <T> ResponseVo serviceSuccess(String imgPre, T t) {
         ResponseVo responseVo = new ResponseVo();
