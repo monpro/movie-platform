@@ -7,6 +7,7 @@ import com.style.guns.api.film.vo.SourceVO;
 import com.style.guns.api.film.vo.YearVO;
 import com.stylefeng.guns.rest.modular.film.vo.FilmConditionVO;
 import com.stylefeng.guns.rest.modular.film.vo.FilmIndexVO;
+import com.stylefeng.guns.rest.modular.film.vo.FilmRequestVO;
 import com.stylefeng.guns.rest.modular.vo.ResponseVo;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -160,5 +161,12 @@ public class FilmController {
 
 
         return ResponseVo.serviceSuccess(filmConditionVO);
+    }
+
+    @RequestMapping(value = "getFilms", method = RequestMethod.GET)
+    public ResponseVo getFilms(FilmRequestVO filmRequestVO) {
+
+
+        return null;
     }
 }
