@@ -10,4 +10,6 @@ public class FilmVO implements Serializable {
 
     private int filmNum;
     private List<FilmInfo> filmInfoList;
+    private int nowPage;
+    private int totalPage;
 }

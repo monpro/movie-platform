@@ -10,9 +10,11 @@ public interface FilmServiceApi {
     List<BannerVO> getBanners();
 
     // get hot films
-    FilmVO getHotFilms(boolean isLimit, int nums);
+    FilmVO getHotFilms(boolean isLimit, int nums, int nowPage, int sortId, int sourceId, int yearId, int catId);
 
-    FilmVO getSoonFilms(boolean isLimit, int nums);
+    FilmVO getSoonFilms(boolean isLimit, int nums, int nowPage, int sortId, int sourceId, int yearId, int catId);
+
+    FilmVO getClassicFilms(int nums, int nowPage, int sortId, int sourceId, int yearId, int catId);
 
     List<FilmInfo> getBoxRanking();
 
