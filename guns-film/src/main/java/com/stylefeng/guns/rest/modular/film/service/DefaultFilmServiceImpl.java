@@ -61,7 +61,23 @@ public class DefaultFilmServiceImpl implements FilmServiceApi {
             filmInfoList = getFilmInfoList(moocFilms);
             result.setFilmInfoList(filmInfoList);
         } else {
-            Page<MoocFilmT> page = new Page<>(nowPage, nums);
+            Page<MoocFilmT> page = null;
+
+            switch (sortId) {
+                case 1:
+                    page = new Page<>(nowPage, nums, "film_box_office");
+                    break;
+                case 2:
+                    page = new Page<>(nowPage, nums, "film_time");
+                    break;
+                case 3:
+                    page = new Page<>(nowPage, nums, "film_score");
+                    break;
+                default:
+                    page = new Page<>(nowPage, nums, "film_box_office");
+                    break;
+            }
+
             // sourceId, yearId and catId not default value, then run a query
 
             if (sourceId != 99) {
@@ -123,8 +139,22 @@ public class DefaultFilmServiceImpl implements FilmServiceApi {
             filmInfoList = getFilmInfoList(moocFilms);
             result.setFilmInfoList(filmInfoList);
         } else {
-            Page<MoocFilmT> page = new Page<>(nowPage, nums);
-            // sourceId, yearId and catId not default value, then run a query
+            Page<MoocFilmT> page = null;
+
+            switch (sortId) {
+                case 1:
+                    page = new Page<>(nowPage, nums, "film_preSaleNum");
+                    break;
+                case 2:
+                    page = new Page<>(nowPage, nums, "film_time");
+                    break;
+                case 3:
+                    page = new Page<>(nowPage, nums, "film_preSaleNum");
+                    break;
+                default:
+                    page = new Page<>(nowPage, nums, "film_preSaleNum");
+                    break;
+            }            // sourceId, yearId and catId not default value, then run a query
 
             if (sourceId != 99) {
                 entityWrapper.eq("film_source", sourceId);
@@ -158,9 +188,22 @@ public class DefaultFilmServiceImpl implements FilmServiceApi {
         EntityWrapper<MoocFilmT> entityWrapper = new EntityWrapper<>();
         // 1 means movies showing
         entityWrapper.eq("film_status", "3");
-        Page<MoocFilmT> page = new Page<>(nowPage, nums);
-        // sourceId, yearId and catId not default value, then run a query
+        Page<MoocFilmT> page = null;
 
+        switch (sortId) {
+            case 1:
+                page = new Page<>(nowPage, nums, "film_box_office");
+                break;
+            case 2:
+                page = new Page<>(nowPage, nums, "film_time");
+                break;
+            case 3:
+                page = new Page<>(nowPage, nums, "film_score");
+                break;
+            default:
+                page = new Page<>(nowPage, nums, "film_box_office");
+                break;
+        }
         if (sourceId != 99) {
             entityWrapper.eq("film_source", sourceId);
         }

@@ -40,8 +40,8 @@ public class FilmController {
         filmIndexVO.setBannerVOList(filmServiceApi.getBanners());
         filmIndexVO.setBoxRanking(filmServiceApi.getBoxRanking());
         filmIndexVO.setExpectRanking(filmServiceApi.getExpectRanking());
-        filmIndexVO.setHotFilms(filmServiceApi.getHotFilms(true, 8));
-        filmIndexVO.setSoonFilms(filmServiceApi.getSoonFilms(true, 8));
+        filmIndexVO.setHotFilms(filmServiceApi.getHotFilms(true, 8, 1, 1, 99, 99, 99));
+        filmIndexVO.setSoonFilms(filmServiceApi.getSoonFilms(true, 8, 1, 1, 99, 99, 99));
         filmIndexVO.setTop100(filmServiceApi.getTop());
         return ResponseVo.serviceSuccess(IMG_PRE, filmIndexVO);
     }
