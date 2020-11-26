@@ -312,7 +312,14 @@ public class DefaultFilmServiceImpl implements FilmServiceApi {
     public FilmDetailVO getFilmDetail(int searchType, String searchParam) {
 
         // query by name if searchType == 1 otherwise by id
+        FilmDetailVO filmDetailVO = null;
 
-        return null;
+        if (searchType == 1) {
+            filmDetailVO = moocFilmTMapper.getFilmDetailByName(searchParam);
+        } else {
+            filmDetailVO = moocFilmTMapper.getFilmDetailById(searchParam);
+        }
+
+        return filmDetailVO;
     }
 }
