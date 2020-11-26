@@ -46,7 +46,7 @@ public class AuthFilter extends OncePerRequestFilter {
         if(ignoreUrl != null && ignoreUrl.length() > 0){
             String[] ignoreUrls = ignoreUrl.split(",");
             for(String url: ignoreUrls){
-                if(request.getServletPath().equals(url)){
+                if (request.getServletPath().startsWith(url)) {
                     chain.doFilter(request, response);
                     return;
                 }

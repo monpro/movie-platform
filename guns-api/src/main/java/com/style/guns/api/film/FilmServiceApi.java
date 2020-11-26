@@ -30,4 +30,14 @@ public interface FilmServiceApi {
 
     List<YearVO> getYears();
 
+    FilmDetailVO getFilmDetail(int searchType, String searchParam);
+
+    FilmDescVO getFilmDesc(String filmId);
+
+    ImgVO getImgs(String filmId);
+
+    ActorVO getDirectorVO(String filmId);
+
+    List<ActorVO> getActors(String filmId);
+
 }

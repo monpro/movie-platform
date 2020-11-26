@@ -1,22 +1,20 @@
 package com.stylefeng.guns.rest.modular.film;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.alibaba.dubbo.rpc.RpcContext;
+import com.style.guns.api.film.FilmAsyncServiceApi;
 import com.style.guns.api.film.FilmServiceApi;
-import com.style.guns.api.film.vo.CatVO;
-import com.style.guns.api.film.vo.FilmVO;
-import com.style.guns.api.film.vo.SourceVO;
-import com.style.guns.api.film.vo.YearVO;
+import com.style.guns.api.film.vo.*;
 import com.stylefeng.guns.rest.modular.film.vo.FilmConditionVO;
 import com.stylefeng.guns.rest.modular.film.vo.FilmIndexVO;
 import com.stylefeng.guns.rest.modular.film.vo.FilmRequestVO;
 import com.stylefeng.guns.rest.modular.vo.ResponseVo;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 @RestController
 @RequestMapping("/film/")
@@ -26,6 +24,9 @@ public class FilmController {
 
     @Reference(interfaceClass = FilmServiceApi.class)
     private FilmServiceApi filmServiceApi;
+
+    @Reference(interfaceClass = FilmAsyncServiceApi.class, async = true)
+    private FilmAsyncServiceApi filmAsyncServiceApi;
 
     /*
         API Gateway:
@@ -221,5 +222,49 @@ public class FilmController {
                 imgPre,
                 filmVO.getFilmInfoList()
         );
+    }
+
+    @RequestMapping(value = "films/{searchParam}", method = RequestMethod.GET)
+    public ResponseVo films(@PathVariable("searchParam") String searchParam,
+                            int searchType) throws ExecutionException, InterruptedException {
+        FilmDetailVO filmDetailVO = filmServiceApi.getFilmDetail(searchType, searchParam);
+
+        if (filmDetailVO == null) {
+            return ResponseVo.serviceFail("cannot find films");
+        } else if (filmDetailVO.getFilmId() == null || filmDetailVO.getFilmId().trim().length() == 0) {
+            return ResponseVo.serviceFail("cannot find films");
+        }
+
+        String filmId = filmDetailVO.getFilmId();
+
+        // get film detail
+        filmAsyncServiceApi.getFilmDesc(filmId);
+        Future<FilmDescVO> filmDescVOFuture = RpcContext.getContext().getFuture();
+
+        // get film img
+        filmAsyncServiceApi.getImgs(filmId);
+        Future<ImgVO> imgVOFuture = RpcContext.getContext().getFuture();
+
+        // get directors
+        filmAsyncServiceApi.getDirectorVO(filmId);
+        Future<ActorVO> directorFuture = RpcContext.getContext().getFuture();
+
+        // get actor
+        filmAsyncServiceApi.getActors(filmId);
+        Future<List<ActorVO>> actorsFuture = RpcContext.getContext().getFuture();
+
+        ActorRequestVO actorRequestVO = new ActorRequestVO();
+        actorRequestVO.setActors(actorsFuture.get());
+        actorRequestVO.setDirector(directorFuture.get());
+
+        InfoRequestVO infoRequestVO = new InfoRequestVO();
+        infoRequestVO.setFilmId(filmId);
+        infoRequestVO.setActors(actorRequestVO);
+        infoRequestVO.setBiography(filmDescVOFuture.get().getBiography());
+        infoRequestVO.setImgVO(imgVOFuture.get());
+
+        filmDetailVO.setRequestVOInfo(infoRequestVO);
+
+        return ResponseVo.serviceSuccess("https://www.google.com", filmDetailVO);
     }
 }

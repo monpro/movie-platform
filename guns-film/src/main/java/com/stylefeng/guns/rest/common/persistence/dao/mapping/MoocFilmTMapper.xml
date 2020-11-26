@@ -19,4 +19,43 @@
         <result column="film_status" property="filmStatus" />
     </resultMap>
 
+    <select id="getFilmDetailByName" parameterType="java.lang.String"
+            resultType="com.style.guns.api.film.vo.FilmDetailVO">
+    SELECT
+        film.uuid as filmId,
+        film.film_name as filmName,
+        info.film_en_name as filmEnName,
+        film.img_address as imgAddress,
+        info.film_score as score,
+        info.film_score_num as scoreNum,
+        film.film_box_office as totalBox,
+        (SELECT GROUP_CONCAT(show_name SEPARATOR ',') FROM mooc_cat_dict_t t
+                  WHERE FIND_IN_SET (t.uuid,
+                    (SELECT REPLACE(TRIM(BOTH '#' FROM film_cats),'#',',') FROM mooc_film_t t WHERE t.uuid=film.uuid))) as categoryInfo,
+        CONCAT((SELECT show_name from mooc_source_dict_t t where t.uuid = film.uuid), ' / ', info.film_length, ' minutes') as originInfo,
+        CONCAT(film.film_name, (SELECT show_name from mooc_source_dict_t t where t.uuid = film.uuid), ' showing') as releaseTimeInfo
+    FROM mooc_film_t film, mooc_film_info_t info
+    where film.UUID = info.film_id
+    and film.film_name LIKE #{filmName}
+    </select>
+    <select id="getFilmDetailById" parameterType="java.lang.String"
+            resultType="com.style.guns.api.film.vo.FilmDetailVO">
+    SELECT
+        film.uuid as filmId,
+        film.film_name as filmName,
+        info.film_en_name as filmEnName,
+        film.img_address as imgAddress,
+        info.film_score as score,
+        info.film_score_num as scoreNum,
+        film.film_box_office as totalBox,
+        (SELECT GROUP_CONCAT(show_name SEPARATOR ',') FROM mooc_cat_dict_t t
+                  WHERE FIND_IN_SET (t.uuid,
+                    (SELECT REPLACE(TRIM(BOTH '#' FROM film_cats),'#',',') FROM mooc_film_t t WHERE t.uuid=film.uuid))) as categoryInfo,
+        CONCAT((SELECT show_name from mooc_source_dict_t t where t.uuid = film.uuid), ' / ', info.film_length, ' minutes') as originInfo,
+        CONCAT(film.film_name, (SELECT show_name from mooc_source_dict_t t where t.uuid = film.uuid), ' showing') as releaseTimeInfo
+    FROM mooc_film_t film, mooc_film_info_t info
+    where film.UUID = info.film_id
+    and film.uuid = #{uuid};
+    </select>
+
 </mapper>
