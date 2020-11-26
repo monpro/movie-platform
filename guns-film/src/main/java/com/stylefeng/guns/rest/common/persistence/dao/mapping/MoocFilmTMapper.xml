@@ -19,7 +19,8 @@
         <result column="film_status" property="filmStatus" />
     </resultMap>
 
-    <select id="getFilmDetailByName" parameterType="java.lang.String" resultType="com.style.guns.api.film.vo.FilmVO">
+    <select id="getFilmDetailByName" parameterType="java.lang.String"
+            resultType="com.style.guns.api.film.vo.FilmDetailVO">
     SELECT
         film.uuid as filmId,
         film.film_name as filmName,
@@ -37,7 +38,8 @@
     where film.UUID = info.film_id
     and film.film_name LIKE #{filmName}
     </select>
-    <select id="getFilmDetailById" parameterType="java.lang.String" resultType="com.style.guns.api.film.vo.FilmVO">
+    <select id="getFilmDetailById" parameterType="java.lang.String"
+            resultType="com.style.guns.api.film.vo.FilmDetailVO">
     SELECT
         film.uuid as filmId,
         film.film_name as filmName,

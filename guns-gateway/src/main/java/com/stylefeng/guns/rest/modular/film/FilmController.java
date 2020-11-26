@@ -222,13 +222,38 @@ public class FilmController {
                             int searchType) {
         FilmDetailVO filmDetailVO = filmServiceApi.getFilmDetail(searchType, searchParam);
 
+        if (filmDetailVO == null) {
+            return ResponseVo.serviceFail("cannot find films");
+        } else if (filmDetailVO.getFilmId() == null || filmDetailVO.getFilmId().trim().length() == 0) {
+            return ResponseVo.serviceFail("cannot find films");
+        }
+
+        String filmId = filmDetailVO.getFilmId();
+
         // get film detail
+        FilmDescVO filmDescVO = filmServiceApi.getFilmDesc(filmId);
 
         // get film img
+        ImgVO imgVO = filmServiceApi.getImgs(filmId);
+
+        // get directors
+        ActorVO director = filmServiceApi.getDirectorVO(filmId);
 
         // get actor
+        List<ActorVO> actors = filmServiceApi.getActors(filmId);
 
+        ActorRequestVO actorRequestVO = new ActorRequestVO();
+        actorRequestVO.setActors(actors);
+        actorRequestVO.setDirector(director);
 
-        return null;
+        InfoRequestVO infoRequestVO = new InfoRequestVO();
+        infoRequestVO.setFilmId(filmId);
+        infoRequestVO.setActors(actorRequestVO);
+        infoRequestVO.setBiography(filmDescVO.getBiography());
+        infoRequestVO.setImgVO(imgVO);
+
+        filmDetailVO.setRequestVOInfo(infoRequestVO);
+
+        return ResponseVo.serviceSuccess("https://www.google.com", filmDetailVO);
     }
 }
