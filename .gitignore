@@ -4,7 +4,6 @@
 *.idea
 target/
 logs/
-guns-core/
 guns-generator/
 # Log file
 *.log
