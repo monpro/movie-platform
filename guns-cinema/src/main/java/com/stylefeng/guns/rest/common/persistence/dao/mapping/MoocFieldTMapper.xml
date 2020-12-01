@@ -35,7 +35,6 @@
 
     </resultMap>
 
-
     <select id="getFilmInfos" parameterType="java.lang.Integer" resultMap="getFilmInfoMap">
         select
             info.film_id,
@@ -53,7 +52,34 @@
         from mooc_hall_film_info_t info
         left join mooc_field_t field
         on field.film_id = info.film_id
-        and field.cinema_id = '1';
+        and field.cinema_id = ${cinemaId};
+    </select>
+    <select id="getHallInfo" parameterType="java.lang.Integer" resultType="com.style.guns.api.cinema.vo.HallInfoVo">
+        select
+            field.UUID as hallFieldId,
+            field.hall_name as hallName,
+            field.price as price,
+            hall.seat_address as seatFile
+        from
+            mooc_hall_dict_T hall,
+            mooc_field_t field
+        where field.hall_id = hall.UUID
+          and field.UUID = ${fieldId};
+    </select>
+    <select id="getFilmInfoById" parameterType="java.lang.Integer" resultType="com.style.guns.api.cinema.vo.FilmInfoVO">
+        select
+            field.film_id as filmId,
+            info.film_name as filmName,
+            info.film_length as filmLength,
+            info.film_language as filmLanguage,
+            info.film_cats as filmCats,
+            info.actors as actors,
+            info.img_address as imgAddress
+        from
+            mooc_field_t field,
+            mooc_hall_film_info_t info
+        where field.film_id = info.film_id
+          and field.uuid = ${fieldId};
     </select>
 
 </mapper>
