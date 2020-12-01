@@ -6,7 +6,10 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.style.guns.api.cinema.CinemaServiceAPI;
 import com.style.guns.api.cinema.vo.*;
 import com.stylefeng.guns.rest.common.persistence.dao.*;
+import com.stylefeng.guns.rest.common.persistence.model.MoocAreaDictT;
+import com.stylefeng.guns.rest.common.persistence.model.MoocBrandDictT;
 import com.stylefeng.guns.rest.common.persistence.model.MoocCinemaT;
+import com.stylefeng.guns.rest.common.persistence.model.MoocHallDictT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -75,17 +78,95 @@ public class DefaultCinemaServiceImpl implements CinemaServiceAPI {
 
     @Override
     public List<BrandVO> getBrands(int brandId) {
-        return null;
+        boolean isDefault = false;
+        List<BrandVO> brandVOS = new ArrayList<>();
+
+        MoocBrandDictT moocBrandDictT = moocBrandDictTMapper.selectById(brandId);
+
+        if (brandId == 99 || moocBrandDictT == null || moocBrandDictT.getUuid() == null) {
+            isDefault = true;
+        }
+
+        List<MoocBrandDictT> moocBrandDictTList = moocBrandDictTMapper.selectList(null);
+        for (MoocBrandDictT brandDictT : moocBrandDictTList) {
+            BrandVO brandVO = new BrandVO();
+            brandVO.setBrandId(brandDictT.getUuid() + "");
+            brandVO.setBrandName(brandDictT.getShowName());
+            if (isDefault) {
+                if (brandId == 99) {
+                    brandVO.setActive(true);
+                }
+            } else {
+                if (brandDictT.getUuid() == brandId) {
+                    brandVO.setActive(true);
+                }
+            }
+            brandVOS.add(brandVO);
+        }
+
+        return brandVOS;
     }
 
     @Override
     public List<AreaVO> getAreas(int areaId) {
-        return null;
+        boolean isDefault = false;
+        List<AreaVO> areaVOS = new ArrayList<>();
+
+        MoocAreaDictT moocAreaDictT = moocAreaDictTMapper.selectById(areaId);
+
+        if (areaId == 99 || moocAreaDictT == null || moocAreaDictT.getUuid() == null) {
+            isDefault = true;
+        }
+
+        List<MoocAreaDictT> moocAreaDictTList = moocAreaDictTMapper.selectList(null);
+        for (MoocAreaDictT areaDictT : moocAreaDictTList) {
+            AreaVO areaVO = new AreaVO();
+            areaVO.setAreaId(areaDictT.getUuid() + "");
+            areaVO.setAreaName(areaDictT.getShowName());
+            if (isDefault) {
+                if (areaId == 99) {
+                    areaVO.setActive(true);
+                }
+            } else {
+                if (areaDictT.getUuid() == areaId) {
+                    areaVO.setActive(true);
+                }
+            }
+            areaVOS.add(areaVO);
+        }
+
+        return areaVOS;
     }
 
     @Override
     public List<HallTypeVO> getHallTypes(int hallType) {
-        return null;
+        boolean isDefault = false;
+        List<HallTypeVO> hallTypeVOS = new ArrayList<>();
+
+        MoocHallDictT moocHallDictT = moocHallDictTMapper.selectById(hallType);
+
+        if (hallType == 99 || moocHallDictT == null || moocHallDictT.getUuid() == null) {
+            isDefault = true;
+        }
+
+        List<MoocHallDictT> moocHallDictTList = moocHallDictTMapper.selectList(null);
+        for (MoocHallDictT moocHallDict : moocHallDictTList) {
+            HallTypeVO hallTypeVO = new HallTypeVO();
+            hallTypeVO.setHallTypeId(moocHallDict.getUuid() + "");
+            hallTypeVO.setHallTypeName(moocHallDict.getShowName());
+            if (isDefault) {
+                if (hallType == 99) {
+                    hallTypeVO.setActive(true);
+                }
+            } else {
+                if (moocHallDict.getUuid() == hallType) {
+                    hallTypeVO.setActive(true);
+                }
+            }
+            hallTypeVOS.add(hallTypeVO);
+        }
+
+        return hallTypeVOS;
     }
 
     @Override
