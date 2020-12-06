@@ -2,13 +2,13 @@ package com.stylefeng.guns.rest.modular.cinema.vo;
 
 import com.style.guns.api.cinema.vo.CinemaInfoVO;
 import com.style.guns.api.cinema.vo.FilmInfoVO;
+import com.style.guns.api.cinema.vo.HallInfoVo;
 import lombok.Data;
-
-import java.util.List;
 
 @Data
 public class CinemaFieldResponseVO {
 
-    private CinemaInfoVO cinemaInfoVO;
-    private List<FilmInfoVO> filmList;
+    private CinemaInfoVO cinemaInfo;
+    private FilmInfoVO filmInfo;
+    private HallInfoVo hallInfo;
 }

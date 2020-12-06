@@ -7,6 +7,7 @@ import com.style.guns.api.cinema.CinemaServiceAPI;
 import com.style.guns.api.cinema.vo.*;
 import com.stylefeng.guns.rest.modular.cinema.vo.CinemaConditionResponseVO;
 import com.stylefeng.guns.rest.modular.cinema.vo.CinemaFieldResponseVO;
+import com.stylefeng.guns.rest.modular.cinema.vo.CinemaFieldsResponseVO;
 import com.stylefeng.guns.rest.modular.vo.ResponseVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,7 +70,7 @@ public class CinemaController {
             CinemaInfoVO cinemaInfo = cinemaServiceAPI.getCinemaInfo(cinemaId);
             List<FilmInfoVO> filmInfoByCinemaId = cinemaServiceAPI.getFilmInfoByCinemaId(cinemaId);
 
-            CinemaFieldResponseVO responseVO = new CinemaFieldResponseVO();
+            CinemaFieldsResponseVO responseVO = new CinemaFieldsResponseVO();
             responseVO.setCinemaInfoVO(cinemaInfo);
             responseVO.setFilmList(filmInfoByCinemaId);
             return ResponseVo.serviceSuccess(IMG_PRE, responseVO);
@@ -80,12 +81,23 @@ public class CinemaController {
         }
     }
 
-    @RequestMapping(value = "getFieldInfo", method = RequestMethod.POST)
+    @RequestMapping(value = "getFieldInfo")
     public ResponseVo getFieldInfo(Integer cinemaId, Integer fieldId) {
 
         try {
-            return null;
+            CinemaInfoVO cinemaInfo = cinemaServiceAPI.getCinemaInfo(cinemaId);
+            HallInfoVo filmFieldInfo = cinemaServiceAPI.getFilmFieldInfo(fieldId);
+            FilmInfoVO filmInfoByFieldId = cinemaServiceAPI.getFilmInfoByFieldId(fieldId);
 
+            // hardcode value
+            // will be removed in future
+            filmFieldInfo.setSoldSeats("1,2,3");
+            CinemaFieldResponseVO responseVO = new CinemaFieldResponseVO();
+            responseVO.setCinemaInfo(cinemaInfo);
+            responseVO.setFilmInfo(filmInfoByFieldId);
+            responseVO.setHallInfo(filmFieldInfo);
+
+            return ResponseVo.serviceSuccess(IMG_PRE, responseVO);
         } catch (Exception e) {
             log.error("exception at getFieldInfo controller", e);
             return ResponseVo.serviceFail("getFieldInfo failed");
