@@ -4,13 +4,16 @@ package com.stylefeng.guns.rest.modular.cinema;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.style.guns.api.cinema.CinemaServiceAPI;
-import com.style.guns.api.cinema.vo.CinemaQueryVO;
-import com.style.guns.api.cinema.vo.CinemaVO;
+import com.style.guns.api.cinema.vo.*;
+import com.stylefeng.guns.rest.modular.cinema.vo.CinemaConditionResponseVO;
+import com.stylefeng.guns.rest.modular.cinema.vo.CinemaFieldResponseVO;
 import com.stylefeng.guns.rest.modular.vo.ResponseVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -20,6 +23,7 @@ public class CinemaController {
     @Reference(interfaceClass = CinemaServiceAPI.class, check = false)
     private CinemaServiceAPI cinemaServiceAPI;
 
+    private static final String IMG_PRE = "https://www.google.com";
     @RequestMapping(value = "getCinemas")
     public ResponseVo getCinemas(CinemaQueryVO cinemaQueryVO) {
 
@@ -36,26 +40,55 @@ public class CinemaController {
                 );
             }
         } catch (Exception e) {
-            log.error("exception at cinema controller", e);
-            return ResponseVo.serviceFail("get cinemas failed");
+            log.error("exception at getCinemas controller", e);
+            return ResponseVo.serviceFail("getCinemas failed");
         }
     }
 
     @RequestMapping(value = "getCondition")
     public ResponseVo getCondition(CinemaQueryVO cinemaQueryVO) {
-
-        return null;
+        try {
+            List<BrandVO> brands = cinemaServiceAPI.getBrands(cinemaQueryVO.getBrandId());
+            List<AreaVO> areas = cinemaServiceAPI.getAreas(cinemaQueryVO.getDistrictId());
+            List<HallTypeVO> hallTypes = cinemaServiceAPI.getHallTypes(cinemaQueryVO.getHallType());
+            CinemaConditionResponseVO responseVO = new CinemaConditionResponseVO();
+            responseVO.setBrandList(brands);
+            responseVO.setAreaList(areas);
+            responseVO.setHallTypeList(hallTypes);
+            return ResponseVo.serviceSuccess(responseVO);
+        } catch (Exception e) {
+            log.error("exception at getCondition controller", e);
+            return ResponseVo.serviceFail("getCondition failed");
+        }
     }
 
     @RequestMapping(value = "getFields")
     public ResponseVo getFields(Integer cinemaId) {
 
-        return null;
+        try {
+            CinemaInfoVO cinemaInfo = cinemaServiceAPI.getCinemaInfo(cinemaId);
+            List<FilmInfoVO> filmInfoByCinemaId = cinemaServiceAPI.getFilmInfoByCinemaId(cinemaId);
+
+            CinemaFieldResponseVO responseVO = new CinemaFieldResponseVO();
+            responseVO.setCinemaInfoVO(cinemaInfo);
+            responseVO.setFilmList(filmInfoByCinemaId);
+            return ResponseVo.serviceSuccess(IMG_PRE, responseVO);
+
+        } catch (Exception e) {
+            log.error("exception at getFields controller", e);
+            return ResponseVo.serviceFail("getFields failed");
+        }
     }
 
     @RequestMapping(value = "getFieldInfo", method = RequestMethod.POST)
     public ResponseVo getFieldInfo(Integer cinemaId, Integer fieldId) {
 
-        return null;
+        try {
+            return null;
+
+        } catch (Exception e) {
+            log.error("exception at getFieldInfo controller", e);
+            return ResponseVo.serviceFail("getFieldInfo failed");
+        }
     }
 }
