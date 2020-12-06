@@ -2,8 +2,10 @@ package com.style.guns.api.cinema.vo;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class CinemaQueryVO {
+public class CinemaQueryVO implements Serializable {
 
     private Integer brandId = 99;
     private Integer districtId = 99;

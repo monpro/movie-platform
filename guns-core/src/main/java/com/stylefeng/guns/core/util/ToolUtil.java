@@ -51,7 +51,7 @@ public class ToolUtil {
     /**
      * 判断一个对象是否是时间类型
      *
-     * @author stylefeng
+     * @author monpro
      * @Date 2017/4/18 12:55
      */
     public static String dateType(Object o) {
@@ -468,7 +468,7 @@ public class ToolUtil {
     /**
      * 当前时间
      *
-     * @author stylefeng
+     * @author monpro
      * @Date 2017/5/7 21:56
      */
     public static String currentTime() {
@@ -478,7 +478,7 @@ public class ToolUtil {
     /**
      * 首字母大写
      *
-     * @author stylefeng
+     * @author monpro
      * @Date 2017/5/7 22:01
      */
     public static String firstLetterToUpper(String val) {
@@ -488,7 +488,7 @@ public class ToolUtil {
     /**
      * 首字母小写
      *
-     * @author stylefeng
+     * @author monpro
      * @Date 2017/5/7 22:02
      */
     public static String firstLetterToLower(String val) {
@@ -498,7 +498,7 @@ public class ToolUtil {
     /**
      * 判断是否是windows操作系统
      *
-     * @author stylefeng
+     * @author monpro
      * @Date 2017/5/24 22:34
      */
     public static Boolean isWinOs() {
@@ -509,7 +509,7 @@ public class ToolUtil {
     /**
      * 获取临时目录
      *
-     * @author stylefeng
+     * @author monpro
      * @Date 2017/5/24 22:35
      */
     public static String getTempPath() {
