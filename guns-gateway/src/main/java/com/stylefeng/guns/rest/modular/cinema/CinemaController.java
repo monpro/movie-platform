@@ -21,7 +21,7 @@ import java.util.List;
 @RequestMapping("/cinema/")
 public class CinemaController {
 
-    @Reference(interfaceClass = CinemaServiceAPI.class, check = false)
+    @Reference(interfaceClass = CinemaServiceAPI.class, cache = "lru", check = false)
     private CinemaServiceAPI cinemaServiceAPI;
 
     private static final String IMG_PRE = "https://www.google.com";
