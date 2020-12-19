@@ -16,5 +16,11 @@
         <result column="order_user" property="orderUser"/>
         <result column="order_status" property="orderStatus"/>
     </resultMap>
+    <select id="getSeatsByField" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT seat_address AS seatAddress
+        FROM mooc_field_t field, mooc_hall_dict_t dict
+        WHERE field.hall_id = dict.UUID
+        AND field.UUID = ${fieldId}
+    </select>
 
 </mapper>
