@@ -3,13 +3,17 @@ package com.stylefeng.guns.rest.modular.order.service;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.style.guns.api.order.OrderServiceAPI;
 import com.style.guns.api.order.vo.OrderVO;
 import com.stylefeng.guns.rest.common.persistence.dao.MoocOrderTMapper;
+import com.stylefeng.guns.rest.common.persistence.model.MoocOrderT;
 import com.stylefeng.guns.rest.common.util.FTPUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @Service(interfaceClass = OrderServiceAPI.class)
@@ -49,7 +53,22 @@ public class DefaultOrderServiceImpl implements OrderServiceAPI {
     }
 
     @Override
-    public boolean isNotSoldSeats(String fieldId, String seats) {
+    public boolean isSoldSeats(String fieldId, String seats) {
+        EntityWrapper entityWrapper = new EntityWrapper();
+        entityWrapper.eq("field_id", fieldId);
+
+        List<MoocOrderT> list = moocOrderTMapper.selectList(entityWrapper);
+        String[] seatAddrs = seats.split(",");
+        for (MoocOrderT moocOrderT : list) {
+            String[] ids = moocOrderT.getSeatsIds().split(",");
+            for (String id : ids) {
+                for (String seat : seatAddrs) {
+                    if (id.equalsIgnoreCase(seat)) {
+                        return true;
+                    }
+                }
+            }
+        }
         return false;
     }
 
